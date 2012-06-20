@@ -43,8 +43,8 @@ my $changer = Bot::Text::Changer::EnoughSpeed->new();
 my $res = $get_user_api->get(sub {
     my ($content) = @_;
 
-    #return if $content->{user}{id} == OWNER_ID();
-    #return if $content->{user}{screen_name} eq OWNER_SCREEN_NAME();
+    return if $content->{user}{id} == OWNER_ID();
+    return if $content->{user}{screen_name} eq OWNER_SCREEN_NAME();
 
     my $changed = $changer->change({
         text        => $content->{text},
@@ -54,11 +54,7 @@ my $res = $get_user_api->get(sub {
 
     return unless $changed;
 
-    $update_statuses_api->update(encode("utf-8", $changer->change({
-        text        => $content->{text},
-        id          => $content->{user}{id},
-        screen_name => $content->{user}{screen_name},
-    })));
+    $update_statuses_api->update($changed);
 });
 
 sub println {
