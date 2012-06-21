@@ -15,9 +15,12 @@ sub change {
         text   screen_name   id
     /};
 
-    return unless $text !~ qr/たい[。｡．. 　…]*\z/;
+    return unless $text =~ qr/たい[。｡．. 　…]*\z/;
 
     my $encoded_text = encode 'utf-8', $text;
+    $encoded_text =~ s{やりたい([。｡．. 　…]*)\z}{やった$2};
+    $encoded_text =~ s{作りたい([。｡．. 　…]*)\z}{作った$2};
+    $encoded_text =~ s{会いたい([。｡．. 　…]*)\z}{会った$2};
     $encoded_text =~ s{(た)い([。｡．. 　…]*)\z}{$1$2};
 
     return sprintf FORMAT(), $screen_name, $encoded_text;
